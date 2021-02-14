@@ -1,58 +1,74 @@
-var canvas;
-var block1,block2,block3,block4;
-var ball, edges;
-var music;
+var canvas, musicSound;
+var box;
+var surface1, surface2, surface3, surface4;
 
-function preload(){
-    music = loadSound("music.mp3");
+function preload() {
+  musicSound = loadSound("music.mp3");
 }
 
 
 function setup(){
-    canvas = createCanvas(800,600);
+  canvas = createCanvas(800,400);
 
-    block1 = createSprite(0,580,360,30);
-    block1.shapeColor = rgb(0,0,255);
+  //create 4 different surfaces
+  surface1 = createSprite(100, 300, 200, 75);
+  surface1.shapeColor = "green";
+  surface1.debug = true;
 
-    block2 = createSprite(295,580,200,30);
-    block2.shapeColor = rgb(255,128,0);
+  surface2 = createSprite(300, 300, 200, 75);
+  surface2.shapeColor = "red";
+  surface2.debug = true;
 
-    block3 = createSprite(515,580,200,30);
-    block3.shapeColor = rgb(153,0,76);
+  surface3 = createSprite(500, 300, 200, 75);
+  surface3.shapeColor = "orange";
+  surface3.debug = true;
 
-    block4 = createSprite(740,580,220,30);
-    block4.shapeColor = rgb(0,100,0);
+  surface4 = createSprite(700, 300, 200, 75);
+  surface4.shapeColor = "blue";
+  surface4.debug = true;
 
-    ball = createSprite(random(20,750),100, 40,40);
-    ball.shapeColor = rgb(255,255,255);
-    ball.velocityX = 4;
-    ball.velocityY = 9;
-
+  //create box sprite and give velocity
+  box = createSprite(50,238, 50,50);
+  box.velocityX = +2.5;
+  box.shapeColor = "white";
+  box.debug = true;
 }
 
 function draw() {
     background(rgb(169,169,169));
-    edges=createEdgeSprites();
-    ball.bounceOff(edges);
 
-    if(block1.isTouching(ball) && ball.bounceOff(block1)){
-        ball.shapeColor = rgb(0,0,255);
-        music.play();
+    //create edgeSprite
+    createEdgeSprites();
+
+    //add condition to check if box touching surface and make it box
+    if (isTouching(box, surface1)) {
+      box.shapeColor = "green";
+    }
+    else {
+      surface1.shapeColor = "green";
     }
 
-    if(block2.isTouching(ball)){
-        ball.shapeColor = rgb(255,128,0);
-        ball.velocityX = 0;
-        ball.velocityY = 0;
-        music.stop();
+    if (isTouching(box, surface2)) {
+      box.shapeColor = "red";
+    }
+    else {
+      surface2.shapeColor = "red";
     }
 
-    if(block3.isTouching(ball) && ball.bounceOff(block3)){
-        ball.shapeColor = rgb(153,0,76);
+    if (isTouching(box, surface3)) {
+      box.shapeColor = "orange";
+    }
+    else {
+      surface3.shapeColor = "orange";
     }
 
-    if(block4.isTouching(ball) && ball.bounceOff(block4)){
-        ball.shapeColor = rgb(0,100,0);
+    if (isTouching(box, surface4)) {
+      box.shapeColor = "blue";
+      box.velocityX = 0;
+      musicSound.play();
+    }
+    else {
+      surface4.shapeColor = "blue";
     }
 
     drawSprites();
